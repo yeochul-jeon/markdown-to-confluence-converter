@@ -7,10 +7,25 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+<script>
+  (function() {
+    var t = localStorage.getItem('theme');
+    if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.body.classList.add('dark-theme');
+    }
+  })();
+</script>
+
   <!-- Header -->
   <header class="header">
-    <h1 class="header__title">Markdown → Confluence Converter</h1>
-    <p class="header__desc">마크다운을 Confluence 위키 마크업으로 변환합니다</p>
+    <div class="header__content">
+      <h1 class="header__title">Markdown → Confluence Converter</h1>
+      <p class="header__desc">마크다운을 Confluence 위키 마크업으로 변환합니다</p>
+    </div>
+    <button id="theme-toggle" class="theme-toggle" title="테마 전환" aria-label="테마 전환">
+      <span class="theme-toggle__icon theme-toggle__icon--light">☀️</span>
+      <span class="theme-toggle__icon theme-toggle__icon--dark">🌙</span>
+    </button>
   </header>
 
   <!-- Converter -->

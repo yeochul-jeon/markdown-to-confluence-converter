@@ -20,6 +20,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const tabs = document.querySelectorAll('.tab');
   const tabContents = document.querySelectorAll('.tab-content');
 
+  // === 테마 토글 ===
+  const themeToggle = document.getElementById('theme-toggle');
+
+  function applyTheme(dark) {
+    document.body.classList.toggle('dark-theme', dark);
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+  }
+
+  // 저장된 테마 복원 (없으면 시스템 설정 따르기)
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    applyTheme(savedTheme === 'dark');
+  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    applyTheme(true);
+  }
+
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.body.classList.contains('dark-theme');
+    applyTheme(!isDark);
+  });
+
   // === 디바운스 ===
   let debounceTimer = null;
   function debounce(fn, delay) {

@@ -57,7 +57,18 @@ const ConfluenceConverter = (() => {
       },
 
       codespan({ text }) {
-        const escaped = text.replace(/\{/g, '\\{').replace(/\}/g, '\\}');
+        const escaped = text
+          .replace(/\\/g, '\\\\')
+          .replace(/\{/g, '\\{')
+          .replace(/\}/g, '\\}')
+          .replace(/\*/g, '\\*')
+          .replace(/_/g, '\\_')
+          .replace(/-/g, '\\-')
+          .replace(/\+/g, '\\+')
+          .replace(/\^/g, '\\^')
+          .replace(/~/g, '\\~')
+          .replace(/\[/g, '\\[')
+          .replace(/\]/g, '\\]');
         return `{{${escaped}}}`;
       },
 
@@ -80,7 +91,10 @@ const ConfluenceConverter = (() => {
         return '\n';
       },
 
-      text({ text }) {
+      text({ text, tokens }) {
+        if (tokens) {
+          return this.parser.parseInline(tokens);
+        }
         return text.replace(/\{/g, '\\{').replace(/\}/g, '\\}');
       },
 
@@ -218,12 +232,25 @@ const ConfluenceConverter = (() => {
    * 후처리: 변환 결과 정리
    */
   function postProcess(text) {
-    return text
+    // {code} 블록 내부를 보호하면서 후처리
+    const codeBlocks = [];
+    let processed = text.replace(/\{code(?::[^}]*)?\}[\s\S]*?\{code\}/g, match => {
+      codeBlocks.push(match);
+      return `\x00CODE_BLOCK_${codeBlocks.length - 1}\x00`;
+    });
+
+    processed = processed
+      // marked.js가 파싱하지 못한 잔여 **bold** → *bold* 변환
+      .replace(/\*\*(.+?)\*\*/g, '*$1*')
       // 연속 3개 이상 빈 줄을 2개로
-      .replace(/\n{3,}/g, '\n\n')
-      // 끝부분 정리
-      .trim()
-      + '\n';
+      .replace(/\n{3,}/g, '\n\n');
+
+    // {code} 블록 복원
+    processed = processed.replace(/\x00CODE_BLOCK_(\d+)\x00/g, (_, idx) => {
+      return codeBlocks[parseInt(idx)];
+    });
+
+    return processed.trim() + '\n';
   }
 
   return { convert };
