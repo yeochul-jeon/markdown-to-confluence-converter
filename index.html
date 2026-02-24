@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown to Confluence Converter</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <h1 class="header__title">Markdown → Confluence Converter</h1>
+    <p class="header__desc">마크다운을 Confluence 위키 마크업으로 변환합니다</p>
+  </header>
+
+  <!-- Converter -->
+  <main class="converter">
+    <!-- Left Panel: Input -->
+    <section class="panel panel--input">
+      <div class="panel__header">
+        <h2 class="panel__title">Markdown</h2>
+        <div class="tab-group">
+          <button class="tab tab--active" data-tab="text">텍스트 입력</button>
+          <button class="tab" data-tab="file">파일 업로드</button>
+        </div>
+      </div>
+      <div class="panel__body">
+        <!-- Text Input Tab -->
+        <div class="tab-content tab-content--active" data-tab-content="text">
+          <textarea id="markdown-input" class="editor" placeholder="여기에 마크다운을 입력하세요..."></textarea>
+        </div>
+        <!-- File Upload Tab -->
+        <div class="tab-content" data-tab-content="file">
+          <div id="drop-zone" class="drop-zone">
+            <div class="drop-zone__icon">&#128196;</div>
+            <p class="drop-zone__text">파일을 드래그하여 놓거나 클릭하여 선택하세요</p>
+            <p class="drop-zone__hint">.md, .markdown, .txt (최대 1MB)</p>
+            <input type="file" id="file-input" class="drop-zone__input" accept=".md,.markdown,.txt">
+          </div>
+          <div id="file-info" class="file-info hidden">
+            <span id="file-name" class="file-info__name"></span>
+            <button id="file-remove" class="file-info__remove" title="파일 제거">&times;</button>
+          </div>
+        </div>
+      </div>
+      <div class="panel__footer">
+        <button id="btn-clear" class="btn btn--secondary">Clear</button>
+      </div>
+    </section>
+
+    <!-- Right Panel: Output -->
+    <section class="panel panel--output">
+      <div class="panel__header">
+        <h2 class="panel__title">Confluence Wiki Markup</h2>
+      </div>
+      <div class="panel__body">
+        <textarea id="confluence-output" class="editor" readonly placeholder="변환 결과가 여기에 표시됩니다..."></textarea>
+      </div>
+      <div class="panel__footer">
+        <div class="theme-select">
+          <label class="theme-select__label" for="code-theme">Code Theme</label>
+          <select id="code-theme" class="theme-select__dropdown">
+            <option value="" selected>Default</option>
+            <option value="DJango">DJango</option>
+            <option value="Emacs">Emacs</option>
+            <option value="FadeToGrey">FadeToGrey</option>
+            <option value="Midnight">Midnight</option>
+            <option value="RDark">RDark</option>
+            <option value="Eclipse">Eclipse</option>
+            <option value="Confluence">Confluence</option>
+          </select>
+        </div>
+        <button id="btn-copy" class="btn btn--primary">Copy</button>
+        <button id="btn-download" class="btn btn--secondary">Download</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Templates -->
+  <section class="templates">
+    <h2 class="templates__title">Templates</h2>
+    <div id="template-grid" class="template-grid"></div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Built with <a href="https://marked.js.org/" target="_blank" rel="noopener">marked.js</a></p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="js/converter.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

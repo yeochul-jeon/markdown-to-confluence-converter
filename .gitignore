@@ -1,0 +1,16 @@
+# Claude Code 설정
+.claude/
+.mcp.json
+
+# Serena 설정
+.serena/
+
+# OS 파일
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
