@@ -60,16 +60,8 @@ const ConfluenceConverter = (() => {
         const escaped = text
           .replace(/\\/g, '\\\\')
           .replace(/\{/g, '\\{')
-          .replace(/\}/g, '\\}')
-          .replace(/\*/g, '\\*')
-          .replace(/_/g, '\\_')
-          .replace(/-/g, '\\-')
-          .replace(/\+/g, '\\+')
-          .replace(/\^/g, '\\^')
-          .replace(/~/g, '\\~')
-          .replace(/\[/g, '\\[')
-          .replace(/\]/g, '\\]');
-        return `{{${escaped}}}`;
+          .replace(/\}/g, '\\}');
+        return `\x00CS\x00${escaped}\x00CE\x00`;
       },
 
       link({ href, tokens }) {
@@ -249,6 +241,11 @@ const ConfluenceConverter = (() => {
     processed = processed.replace(/\x00CODE_BLOCK_(\d+)\x00/g, (_, idx) => {
       return codeBlocks[parseInt(idx)];
     });
+
+    // 인라인 코드(codespan) 플레이스홀더 복원
+    processed = processed
+      .replace(/\x00CS\x00/g, '{{')
+      .replace(/\x00CE\x00/g, '}}');
 
     return processed.trim() + '\n';
   }
