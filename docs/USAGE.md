@@ -145,12 +145,15 @@ System.out.println("Hello");
 
 ### 설치 및 빌드
 
+프로젝트 루트 디렉토리(`package.json`이 있는 위치)에서 아래 명령을 실행합니다.
+
 ```bash
-npm install        # 의존성 설치
-npm run build      # dist/md2confluence.js 단일 파일 생성
+cd markdown-to-confluence-converter   # 프로젝트 루트로 이동
+npm install                           # marked + esbuild 의존성 설치
+npm run build                         # dist/md2confluence.js 단일 파일 생성
 ```
 
-빌드가 완료되면 `dist/md2confluence.js` 파일 하나만으로 실행할 수 있습니다.
+`npm run build`는 esbuild를 사용하여 `cli.js`, `js/converter.js`, `marked` 라이브러리를 하나의 파일(`dist/md2confluence.js`)로 번들링합니다. 빌드가 완료되면 이 파일 하나만으로 실행할 수 있습니다.
 
 ### 팀 배포
 

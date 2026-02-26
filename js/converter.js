@@ -1,8 +1,16 @@
 /**
  * Markdown → Confluence Wiki Markup 변환 엔진
  * marked.js v15 커스텀 렌더러 기반
+ * UMD: 브라우저(글로벌 marked) / Node.js(require) 듀얼 지원
  */
-const ConfluenceConverter = (() => {
+;(function (root, factory) {
+  if (typeof module === 'object' && module.exports) {
+    const { marked } = require('marked');
+    module.exports = factory(marked);
+  } else {
+    root.ConfluenceConverter = factory(root.marked);
+  }
+}(typeof globalThis !== 'undefined' ? globalThis : this, function (marked) {
   'use strict';
 
   /**
@@ -251,4 +259,4 @@ const ConfluenceConverter = (() => {
   }
 
   return { convert };
-})();
+}));

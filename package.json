@@ -1,0 +1,17 @@
+{
+  "name": "md2confluence",
+  "version": "1.0.0",
+  "description": "마크다운 → Confluence 위키 마크업 변환 CLI 도구",
+  "bin": {
+    "md2confluence": "./cli.js"
+  },
+  "dependencies": {
+    "marked": "^15.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  },
+  "scripts": {
+    "build": "esbuild cli.js --bundle --platform=node --outfile=dist/md2confluence.js --banner:js='#!/usr/bin/env node'"
+  }
+}

@@ -97,6 +97,62 @@
     <div id="template-grid" class="template-grid"></div>
   </section>
 
+  <!-- CLI Guide -->
+  <section class="cli-guide">
+    <h2 class="cli-guide__title">CLI 사용법</h2>
+    <p class="cli-guide__desc">터미널에서 다수 파일을 일괄 변환하거나 CI/CD 파이프라인에 연동할 수 있습니다.</p>
+
+    <div class="cli-guide__install">
+      <h3 class="cli-guide__subtitle">설치 및 빌드</h3>
+      <p class="cli-guide__note">프로젝트 루트 디렉토리(<code>package.json</code>이 있는 위치)에서 실행합니다.</p>
+      <pre class="cli-guide__code"><code>npm install        # marked + esbuild 의존성 설치
+npm run build      # dist/md2confluence.js 단일 파일 생성</code></pre>
+      <p class="cli-guide__note"><code>npm run build</code>는 esbuild로 <code>cli.js</code>, <code>js/converter.js</code>, <code>marked</code>를 하나의 파일로 번들링합니다. 빌드 후 <code>dist/md2confluence.js</code> 단일 파일로 배포 가능 (<code>node_modules</code> 불필요)</p>
+    </div>
+
+    <div class="cli-guide__grid">
+      <div class="cli-guide__card">
+        <h4 class="cli-guide__card-title">단일 파일 변환</h4>
+        <pre class="cli-guide__code"><code>node dist/md2confluence.js README.md</code></pre>
+        <p class="cli-guide__card-desc">같은 디렉토리에 README.wiki 생성</p>
+      </div>
+      <div class="cli-guide__card">
+        <h4 class="cli-guide__card-title">복수 파일 / 디렉토리</h4>
+        <pre class="cli-guide__code"><code>node dist/md2confluence.js -r docs/</code></pre>
+        <p class="cli-guide__card-desc">디렉토리 내 .md 파일을 재귀 탐색하여 변환</p>
+      </div>
+      <div class="cli-guide__card">
+        <h4 class="cli-guide__card-title">stdin 파이프</h4>
+        <pre class="cli-guide__code"><code>cat README.md | node dist/md2confluence.js</code></pre>
+        <p class="cli-guide__card-desc">표준 입력을 받아 stdout으로 결과 출력</p>
+      </div>
+      <div class="cli-guide__card">
+        <h4 class="cli-guide__card-title">출력 디렉토리 지정</h4>
+        <pre class="cli-guide__code"><code>node dist/md2confluence.js -o output/ docs/*.md</code></pre>
+        <p class="cli-guide__card-desc">변환 결과를 지정 디렉토리에 저장</p>
+      </div>
+    </div>
+
+    <div class="cli-guide__options">
+      <h3 class="cli-guide__subtitle">옵션 레퍼런스</h3>
+      <table class="cli-guide__table">
+        <thead>
+          <tr>
+            <th>옵션</th>
+            <th>설명</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>-h, --help</code></td><td>도움말 출력</td></tr>
+          <tr><td><code>-o, --output &lt;경로&gt;</code></td><td>출력 디렉토리 지정 (기본: 입력 파일과 같은 위치)</td></tr>
+          <tr><td><code>-r, --recursive</code></td><td>디렉토리 하위까지 재귀 탐색</td></tr>
+          <tr><td><code>-t, --theme &lt;테마&gt;</code></td><td>코드 블록 테마 (예: Midnight, RDark)</td></tr>
+          <tr><td><code>--stdout</code></td><td>결과를 stdout으로 출력 (파일 미생성)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer class="footer">
     <p>Built with <a href="https://marked.js.org/" target="_blank" rel="noopener">marked.js</a></p>
