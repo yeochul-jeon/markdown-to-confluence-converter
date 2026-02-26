@@ -5,6 +5,13 @@
 # Serena 설정
 .serena/
 
+# MCP Server (별도 저장소)
+mcp-server/
+
+# Node.js
+node_modules/
+dist/
+
 # OS 파일
 .DS_Store
 Thumbs.db
