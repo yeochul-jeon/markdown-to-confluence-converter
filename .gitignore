@@ -8,7 +8,8 @@
 
 # Node.js
 node_modules/
-dist/
+dist/*
+!dist/md2confluence.js
 
 # OS 파일
 .DS_Store

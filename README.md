@@ -67,6 +67,38 @@ dist/md2confluence.js   # esbuild 번들 (단일 파일 배포용)
 - **`app.js`** — DOM 이벤트 바인딩, 실시간 변환(디바운스 200ms), 파일 업로드, 탭 전환, 템플릿 렌더링 등 UI 전반을 담당합니다.
 - **`cli.js`** — Node.js `parseArgs` 기반 CLI 진입점. 파일/디렉토리 변환, stdin 파이프, 출력 경로 지정 등을 처리합니다.
 
+## 설치
+
+### 빠른 시작 (CLI만 사용)
+
+저장소를 클론하면 빌드 없이 CLI를 바로 사용할 수 있습니다.
+
+```bash
+git clone https://github.com/yeochul-jeon/markdown-to-confluence-converter.git
+cd markdown-to-confluence-converter
+node dist/md2confluence.js README.md    # 바로 변환 가능
+```
+
+> **필요 환경:** Node.js 18 이상
+
+### 개발 환경 설치
+
+변환기 소스를 수정하거나 번들을 재빌드하려면 의존성을 설치합니다.
+
+```bash
+npm install
+npm run build    # dist/md2confluence.js 재생성
+```
+
+### Claude Code Skills 사용
+
+커스텀 Skills(`/convert`, `/test-conversion` 등)를 사용하려면 Claude Code CLI가 추가로 필요합니다.
+
+```bash
+npm install -g @anthropic-ai/claude-code
+claude    # 프로젝트 디렉토리에서 실행
+```
+
 ## 실행 방법
 
 ### 브라우저
@@ -102,7 +134,7 @@ node dist/md2confluence.js -r docs/
 cat README.md | node dist/md2confluence.js
 ```
 
-> **팀 배포:** `dist/md2confluence.js` 파일 하나만 전달하면 됩니다. `node_modules` 설치 없이 Node.js만 있으면 실행 가능합니다.
+> **팀 배포:** 이 저장소를 클론하면 `dist/md2confluence.js`가 포함되어 있어 빌드 없이 바로 사용할 수 있습니다.
 
 ## 변환 예시
 
