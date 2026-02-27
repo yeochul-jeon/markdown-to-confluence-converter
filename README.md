@@ -152,6 +152,134 @@ git clone https://github.com/example/project.git
 {code}
 ```
 
+## AI 코딩 도구 연동
+
+이 프로젝트의 CLI는 stdin/stdout 파이프를 지원하므로, AI 코딩 도구와 결합하면 마크다운 변환을 자동화하거나 변환기 자체를 확장하는 데 활용할 수 있습니다. 아래는 주요 AI 코딩 도구별 설정 방법과 실전 활용 예시입니다.
+
+### Claude Code (Anthropic)
+
+**설정 파일:** 프로젝트 루트의 `CLAUDE.md`
+
+Claude Code는 세션 시작 시 `CLAUDE.md`를 자동으로 읽어 프로젝트 컨텍스트를 인식합니다. 이 프로젝트에는 이미 `CLAUDE.md`가 포함되어 있어 별도 설정 없이 바로 활용할 수 있습니다.
+
+추가로 `.mcp.json` 파일에 MCP 서버를 설정하면 외부 도구(파일 시스템, 코드 분석 등)와의 연동도 가능합니다.
+
+**실전 활용 예시:**
+
+```bash
+# CLI 파이프로 변환 결과 확인
+cat doc.md | node dist/md2confluence.js
+
+# Claude Code에게 직접 요청
+# 프롬프트: "README.md를 Confluence 마크업으로 변환해서 output/ 폴더에 저장해줘"
+# 프롬프트: "converter.js에 Mermaid 다이어그램 지원을 추가해줘"
+```
+
+### GitHub Copilot
+
+**설정 파일:** `.github/copilot-instructions.md`
+
+프로젝트 루트에 아래 경로로 파일을 생성하면, Copilot Chat과 코드 자동완성 시 프로젝트 맥락을 반영합니다.
+
+**설정 파일 내용 예시:**
+
+```markdown
+# Markdown to Confluence Converter
+
+## 프로젝트 구조
+- `js/converter.js` — marked.js 커스텀 렌더러 기반 변환 엔진 (UMD)
+- `js/templates.js` — 4종 문서 템플릿
+- `js/app.js` — UI 이벤트 핸들러
+- `cli.js` — Node.js CLI 진입점
+
+## 핵심 API
+- `ConfluenceConverter.convert(markdown)` — 마크다운 → Confluence 위키 마크업 변환
+- `Templates.getAll()` / `Templates.getById(id)` — 템플릿 조회
+
+## CLI 사용법
+- `node dist/md2confluence.js <파일>` — 파일 변환
+- `cat file.md | node dist/md2confluence.js` — stdin 파이프
+```
+
+**실전 활용 예시:**
+
+```
+# Copilot Chat에서 @workspace 태그로 프로젝트 전체 맥락 참조
+@workspace converter.js의 테이블 변환 로직을 설명해줘
+@workspace 새로운 마크다운 요소(각주)를 변환기에 추가하려면?
+```
+
+### Cursor
+
+**설정 파일:** `.cursor/rules/` 디렉토리 내 `.mdc` 파일
+
+Cursor의 Rules 기능을 사용하면 AI가 프로젝트 아키텍처를 이해한 상태에서 코드를 생성합니다.
+
+**설정 파일 내용 예시 (`.cursor/rules/converter.mdc`):**
+
+```markdown
+---
+description: Markdown to Confluence 변환기 프로젝트 규칙
+globs: ["js/**/*.js", "cli.js"]
+---
+
+# 변환 엔진 아키텍처
+- marked.js 커스텀 렌더러 패턴 사용 (renderer 객체의 메서드 오버라이드)
+- `walkTokens` 훅으로 리스트 중첩 접두사 사전 계산
+- UMD 모듈 형태: 브라우저(window)와 Node.js(module.exports) 양쪽 지원
+
+# CLI 옵션
+- `-o, --output <dir>` — 출력 디렉토리 지정
+- `-r, --recursive` — 디렉토리 재귀 탐색
+- stdin/stdout 파이프 지원
+```
+
+**실전 활용 예시:**
+
+```
+# Composer에서 변환기 기능 수정 요청
+"converter.js에서 이미지 변환 시 width/height 속성도 지원하도록 수정해줘"
+
+# @file 참조로 특정 파일 기반 작업
+@converter.js 코드 블록 테마 매핑 로직을 리팩토링해줘
+```
+
+### OpenAI Codex CLI
+
+**설정 파일:** 프로젝트 루트의 `AGENTS.md`
+
+Codex CLI는 `AGENTS.md`를 읽어 프로젝트 맥락을 파악합니다.
+
+**설정 파일 내용 예시:**
+
+```markdown
+# Markdown to Confluence Converter
+
+## 프로젝트 컨텍스트
+브라우저 + CLI 듀얼 마크다운 → Confluence 위키 마크업 변환기.
+순수 HTML/CSS/JS (프레임워크 없음), marked.js 커스텀 렌더러 기반.
+
+## 주요 파일
+- `js/converter.js` — 핵심 변환 엔진 (ConfluenceConverter 클래스)
+- `cli.js` — CLI 진입점 (Node.js parseArgs)
+- `dist/md2confluence.js` — esbuild 단일 번들
+
+## CLI 사용법
+node dist/md2confluence.js <파일>           # 파일 변환
+node dist/md2confluence.js -r <디렉토리>    # 재귀 변환
+cat file.md | node dist/md2confluence.js   # stdin 파이프
+```
+
+**실전 활용 예시:**
+
+```bash
+# Codex CLI로 변환 작업 요청
+codex "README.md를 Confluence 마크업으로 변환해줘"
+
+# stdin 파이프와 조합한 자동화
+codex "docs/ 폴더의 모든 마크다운을 Confluence 마크업으로 일괄 변환하는 셸 스크립트를 만들어줘"
+```
+
 ## 라이선스
 
 이 프로젝트는 자유롭게 사용할 수 있습니다.
