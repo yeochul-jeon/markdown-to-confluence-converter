@@ -1,5 +1,6 @@
-# Claude Code 설정
-.claude/
+# Claude Code 설정 (commands/는 팀 공유용으로 추적)
+.claude/*
+!.claude/commands/
 .mcp.json
 
 # Serena 설정

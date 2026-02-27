@@ -175,6 +175,72 @@ cat doc.md | node dist/md2confluence.js
 # 프롬프트: "converter.js에 Mermaid 다이어그램 지원을 추가해줘"
 ```
 
+#### 커스텀 Skills (슬래시 커맨드)
+
+이 프로젝트에는 반복 작업을 자동화하는 **커스텀 Skills**이 포함되어 있습니다. 프로젝트를 클론하면 별도 설정 없이 바로 사용할 수 있습니다.
+
+**사전 준비:**
+
+1. [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)가 설치되어 있어야 합니다.
+2. 이 저장소를 클론합니다: `git clone <repo-url> && cd markdown-to-confluence-converter`
+
+**Skills란?**
+
+Skills는 `.claude/commands/` 디렉토리에 정의된 프로젝트 전용 슬래시 커맨드입니다. Claude Code 대화 중 `/`를 입력하면 사용 가능한 Skills 목록이 표시됩니다. 전역 Skills(`~/.claude/commands/`)와 달리, 프로젝트 Skills는 이 저장소를 클론한 모든 팀원이 동일하게 사용할 수 있습니다.
+
+**사용 가능한 Skills:**
+
+| 커맨드 | 설명 | 사용 예시 |
+|---|---|---|
+| `/convert` | 마크다운 파일을 Confluence 위키 마크업으로 변환 | `/convert README.md` |
+| `/test-conversion` | 변환 결과 회귀 테스트 실행 | `/test-conversion heading` |
+| `/add-renderer` | converter.js에 새 마크다운 요소 렌더러 추가 | `/add-renderer footnote` |
+| `/add-template` | templates.js에 새 문서 템플릿 추가 | `/add-template 장애보고서` |
+| `/build-and-verify` | 번들 재빌드 및 소스/번들 일치 검증 | `/build-and-verify` |
+
+**사용 방법:**
+
+```
+1. 프로젝트 디렉토리에서 Claude Code를 실행합니다.
+   $ claude
+
+2. 대화창에 `/`를 입력하면 사용 가능한 Skills 목록이 나타납니다.
+
+3. 원하는 커맨드를 선택하고 필요한 인자를 입력합니다.
+   예: /convert README.md
+       /test-conversion table
+       /add-template 릴리스노트
+```
+
+**각 Skill 상세:**
+
+- **`/convert`** — 마크다운 파일을 `.wiki` 파일로 변환합니다. **원본 `.md` 파일은 변경되지 않으며**, 동일 경로에 `.wiki` 확장자로 새 파일이 생성됩니다 (예: `README.md` → `README.wiki`). 파일 경로, `-o` (출력 디렉토리), `-r` (재귀 탐색), `-t` (코드 블록 테마) 옵션을 지원합니다. stdin/stdout 파이프 모드 사용 시 파일을 생성하지 않고 터미널에 결과만 출력합니다. 인자 없이 실행하면 현재 디렉토리의 `.md` 파일 목록을 표시합니다.
+- **`/test-conversion`** — `converter.js` 수정 후 17개 마크다운 요소에 대한 회귀 테스트를 실행합니다. 특정 요소명을 인자로 전달하면 해당 요소만 테스트합니다.
+- **`/add-renderer`** — `js/converter.js`에 새로운 마크다운 요소의 Confluence 렌더러를 추가합니다. 기존 렌더러 패턴을 분석하여 코드 스타일에 맞게 작성하고, 빌드 및 테스트까지 수행합니다.
+- **`/add-template`** — `js/templates.js`에 새 문서 템플릿을 추가합니다. 기존 4개 템플릿 구조에 맞춰 작성하고 변환 테스트를 수행합니다.
+- **`/build-and-verify`** — `npm run build`로 번들을 재생성한 뒤, 소스(`cli.js`)와 번들(`dist/md2confluence.js`)의 변환 결과가 일치하는지 검증합니다. 커밋 전 실행을 권장합니다.
+
+**나만의 Skill 추가하기:**
+
+`.claude/commands/` 디렉토리에 `.md` 파일을 추가하면 새로운 프로젝트 전용 Skill이 됩니다.
+
+```markdown
+# 파일: .claude/commands/my-skill.md
+
+# /my-skill — 간단한 설명
+
+수행할 작업을 자연어로 기술합니다.
+
+## 인자
+$ARGUMENTS
+
+## 실행 절차
+1. 첫 번째 단계
+2. 두 번째 단계
+```
+
+파일명이 곧 커맨드명이 됩니다 (예: `my-skill.md` → `/my-skill`). `$ARGUMENTS`는 사용자가 커맨드 뒤에 입력한 텍스트로 치환됩니다.
+
 ### GitHub Copilot
 
 **설정 파일:** `.github/copilot-instructions.md`
