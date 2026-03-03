@@ -97,6 +97,115 @@
     <div id="template-grid" class="template-grid"></div>
   </section>
 
+  <!-- Features -->
+  <section class="features">
+    <h2 class="features__title">주요 기능</h2>
+    <div class="features__grid">
+      <div class="features__card">
+        <h3 class="features__card-title">브라우저</h3>
+        <ul class="features__list">
+          <li>실시간 마크다운 → Confluence 위키 마크업 변환</li>
+          <li>파일 업로드 (드래그 & 드롭 / 클릭 선택)</li>
+          <li>결과 클립보드 복사 및 파일 다운로드</li>
+          <li>코드 블록 테마 선택 (8종)</li>
+          <li>4종 문서 템플릿 제공</li>
+          <li>반응형 디자인 (모바일/태블릿 대응)</li>
+        </ul>
+      </div>
+      <div class="features__card">
+        <h3 class="features__card-title">CLI</h3>
+        <ul class="features__list">
+          <li>단일/복수 파일 일괄 변환</li>
+          <li>디렉토리 재귀 탐색 (<code>-r</code>)</li>
+          <li>stdin/stdout 파이프 지원</li>
+          <li>esbuild 단일 파일 번들 배포</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Supported Elements -->
+  <section class="elements">
+    <h2 class="elements__title">지원 마크다운 요소</h2>
+    <div class="elements__wrapper">
+      <table class="elements__table">
+        <thead>
+          <tr>
+            <th>마크다운 요소</th>
+            <th>마크다운 문법</th>
+            <th>Confluence 마크업</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>제목 (h1~h6)</td><td><code># 제목</code></td><td><code>h1. 제목</code></td></tr>
+          <tr><td>볼드</td><td><code>**텍스트**</code></td><td><code>*텍스트*</code></td></tr>
+          <tr><td>이탤릭</td><td><code>*텍스트*</code></td><td><code>_텍스트_</code></td></tr>
+          <tr><td>취소선</td><td><code>~~텍스트~~</code></td><td><code>-텍스트-</code></td></tr>
+          <tr><td>인라인 코드</td><td><code>`코드`</code></td><td><code>{{코드}}</code></td></tr>
+          <tr><td>코드 블록</td><td><code>```lang</code></td><td><code>{code:language=lang}</code></td></tr>
+          <tr><td>링크</td><td><code>[텍스트](url)</code></td><td><code>[텍스트|url]</code></td></tr>
+          <tr><td>이미지</td><td><code>![alt](url)</code></td><td><code>!url|alt=alt!</code></td></tr>
+          <tr><td>인용</td><td><code>&gt; 텍스트</code></td><td><code>{quote}텍스트{quote}</code></td></tr>
+          <tr><td>순서 없는 리스트</td><td><code>- 항목</code></td><td><code>* 항목</code></td></tr>
+          <tr><td>순서 있는 리스트</td><td><code>1. 항목</code></td><td><code># 항목</code></td></tr>
+          <tr><td>테이블</td><td><code>| a | b |</code></td><td><code>|| a || b ||</code> (헤더)</td></tr>
+          <tr><td>수평선</td><td><code>---</code></td><td><code>----</code></td></tr>
+          <tr><td>체크박스 (완료)</td><td><code>- [x] 항목</code></td><td><code>* (/) 항목</code></td></tr>
+          <tr><td>체크박스 (미완료)</td><td><code>- [ ] 항목</code></td><td><code>* (x) 항목</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Examples -->
+  <section class="examples">
+    <h2 class="examples__title">변환 예시</h2>
+    <div class="examples__grid">
+      <div class="examples__card">
+        <h3 class="examples__card-title">입력 (Markdown)</h3>
+        <pre class="examples__code"><code># 프로젝트 소개
+
+이 프로젝트는 **마크다운**을 _Confluence 마크업_으로 변환합니다.
+
+## 설치
+
+1. 저장소를 클론합니다
+2. 브라우저에서 `index.html`을 엽니다
+
+- 빠른 변환
+- 파일 업로드 지원
+
+&gt; 자세한 사용법은 [가이드](docs/USAGE.md)를 참조하세요.
+
+```bash
+git clone https://github.com/example/project.git
+```</code></pre>
+      </div>
+      <div class="examples__card">
+        <h3 class="examples__card-title">출력 (Confluence Wiki Markup)</h3>
+        <pre class="examples__code"><code>h1. 프로젝트 소개
+
+이 프로젝트는 *마크다운*을 _Confluence 마크업_으로 변환합니다.
+
+h2. 설치
+
+# 저장소를 클론합니다
+# 브라우저에서 {{index.html}}을 엽니다
+
+* 빠른 변환
+* 파일 업로드 지원
+
+{quote}
+자세한 사용법은 [가이드|docs/USAGE.md]를 참조하세요.
+{quote}
+
+{code:language=bash}
+git clone https://github.com/example/project.git
+{code}</code></pre>
+      </div>
+    </div>
+  </section>
+
   <!-- CLI Guide -->
   <section class="cli-guide">
     <h2 class="cli-guide__title">CLI 사용법</h2>
